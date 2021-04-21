@@ -19,13 +19,15 @@
                         <div class="content">
                             <h1>@Model.Profile.UserName</h1>
                             <b>Rank #@Model.Rank</b>
-                            <h2>Best Achievements</h2>
+                            <h2>Achievements</h2>
                             <ul>
                                 @foreach (var achievement in Model.Profile.Achievements)
                                 {
                                     <li>@achievement</li>
                                 }
                             </ul>
+                            <p>This profile is perfect for Space Games</p>
+                            <p>Adding one more Line</p>
                         </div>
                     </div>
                 </div>
