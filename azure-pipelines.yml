@@ -109,7 +109,7 @@ stages:
       - deployment: Deploy
         pool:
           vmImage: 'ubuntu-18.04'
-          environment: test
+        environment: test
         variables:
           - group: PRacticeRelease
         strategy:
