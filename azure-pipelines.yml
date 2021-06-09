@@ -4,6 +4,14 @@ trigger:
 variables:
     buildConfiguration: 'Release'
     releaseBranchName: 'release'
+
+schedules:
+  - cron: '0 3 * * *'
+    displayName: 'Deploys every day at 3 am UTC'
+    branches:
+      include:
+        - release
+    always: false
   
 stages:
   - stage: 'Build'
@@ -93,3 +101,26 @@ stages:
                 azureSubscription: 'DevOps-Practice-Service-Conn'
                 appName: '$(WebAppName)'
                 package: '$(Pipeline.Workspace)/drop/$(buildConfiguration)/*.zip'
+  - stage: 'Test'
+    displayName: 'Deploy to Web To Test Env'
+    dependsOn:  Test
+     #condition: eq(variables['Build.Reason'], 'Schedule')
+    jobs:
+      - deployment: Deploy
+        pool:
+          vmImage: 'ubuntu-18.04'
+          environment: test
+        variables:
+          - group: PRacticeRelease
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+              - download: current
+                artifact: drop
+              - task: AzureWebApp@1
+                displayName: 'Azure App Service Deploy: website'
+                inputs:
+                  azureSubscription: 'DevOps-Practice-Service-Conn'
+                  appName: '$(WebAppNameTest)'
+                  package: '$(Pipeline.Workspace)/drop/$(buildConfiguration)/*.zip'
