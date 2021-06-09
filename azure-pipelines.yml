@@ -111,7 +111,7 @@ stages:
           vmImage: 'ubuntu-18.04'
         environment: test
         variables:
-          - group: PRacticeRelease
+          - group: PracticeRelease
         strategy:
           runOnce:
             deploy:
@@ -123,4 +123,26 @@ stages:
                 inputs:
                   azureSubscription: 'DevOps-Practice-Service-Conn'
                   appName: '$(WebAppNameTest)'
+                  package: '$(Pipeline.Workspace)/drop/$(buildConfiguration)/*.zip'
+  - stage: 'Stage'
+    displayName: 'Deploy to Web To Stage Env on Approval'
+    dependsOn:  Test    
+    jobs:
+      - deployment: Deploy
+        pool:
+          vmImage: 'ubuntu-18.04'
+        environment: stage
+        variables:
+          - group: PracticeRelease
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+              - download: current
+                artifact: drop
+              - task: AzureWebApp@1
+                displayName: 'Azure App Service Deploy: website'
+                inputs:
+                  azureSubscription: 'DevOps-Practice-Service-Conn'
+                  appName: '$(WebAppNameStaging)'
                   package: '$(Pipeline.Workspace)/drop/$(buildConfiguration)/*.zip'
