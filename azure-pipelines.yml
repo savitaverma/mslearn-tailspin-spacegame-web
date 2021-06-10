@@ -96,7 +96,7 @@ stages:
             - download: current
               artifact: drop
             - task: AzureWebApp@1
-              displayName: 'Azure App Service Deploy: website'
+              displayName: 'Azure App Service Deploy: $(WebAppName)'
               inputs:
                 azureSubscription: 'DevOps-Practice-Service-Conn'
                 appName: '$(WebAppName)'
@@ -119,7 +119,7 @@ stages:
               - download: current
                 artifact: drop
               - task: AzureWebApp@1
-                displayName: 'Azure App Service Deploy: website'
+                displayName: 'Azure App Service Deploy: $(WebAppNameTest)'
                 inputs:
                   azureSubscription: 'DevOps-Practice-Service-Conn'
                   appName: '$(WebAppNameTest)'
@@ -141,7 +141,7 @@ stages:
               - download: current
                 artifact: drop
               - task: AzureWebApp@1
-                displayName: 'Azure App Service Deploy: website'
+                displayName: 'Azure App Service Deploy: $(WebAppNameStaging)'
                 inputs:
                   azureSubscription: 'DevOps-Practice-Service-Conn'
                   appName: '$(WebAppNameStaging)'
